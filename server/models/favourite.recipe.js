@@ -6,12 +6,14 @@ const favouriteRecipeSchema = new mongoose.Schema({
     ref: "user",
   },
   recipe: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "recipeSchema",
+    type: Object,
   },
 });
 
-const favouriteRecipeModel = mongoose.model("favouriteRecipe", userSchema);
+const favouriteRecipeModel = mongoose.model(
+  "favouriteRecipe",
+  favouriteRecipeSchema
+);
 
 module.exports = {
   favouriteRecipeModel,

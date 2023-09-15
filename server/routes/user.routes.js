@@ -70,3 +70,7 @@ userRouter.post("/login", async (req, res) => {
       .send({ message: "An error occurred", error: error.message });
   }
 });
+
+module.exports = {
+  userRouter,
+};
