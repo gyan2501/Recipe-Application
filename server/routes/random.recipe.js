@@ -32,3 +32,4 @@ recipeRouter.get("/random-recipes", async (req, res) => {
 module.exports = {
   recipeRouter,
 };
+
