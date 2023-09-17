@@ -1,13 +1,17 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React from "react";
+import Navbar from "../components/Navbar";
+import { Box } from "@chakra-ui/react";
 
 const Profile = () => {
   return (
     <>
-    <Navbar/>
-    
-    Profile</>
-  )
-}
+      <Navbar />
+      Profile
+      <Box border={"1px solid red"}>
 
-export default Profile
+      </Box>
+    </>
+  );
+};
+
+export default Profile;

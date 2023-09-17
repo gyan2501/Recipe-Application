@@ -6,22 +6,70 @@ import {
   FormLabel,
   Input,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    let userData = { name, email, password };
 
-    const userData = {
-      name,
-      email,
-      password,
-    };
-    console.log(userData);
+    if (!name || !email || !password) {
+      toast({
+        title: "Please fill all credentials",
+        description: "All fields are required",
+        status: "error",
+        duration: 5000,
+        position: "top",
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      let res = await fetch("http://localhost:8080/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+      let data = await res.json();
+      console.log(userData, res);
+      setIsLoading(false);
+      if (res.status === 200) {
+        toast({
+          title: "Registered successfully",
+          description: "Have a great day",
+          status: "success",
+          duration: 6000,
+          isClosable: true,
+          position: "top",
+        });
+        setEmail("")
+        setPassword("")
+        setName("")
+        console.log(data);
+      } else {
+        toast({
+          title: "Registration failed",
+          status: "error",
+          duration: 6000,
+          isClosable: true,
+          position: "top",
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
   };
 
   return (
@@ -55,7 +103,7 @@ const Signup = () => {
             </FormControl>
 
             <Button type="submit" colorScheme="teal" mt={3}>
-              Signup
+              Sign up
             </Button>
           </Stack>
         </form>

@@ -17,10 +17,12 @@ import {
 const RecipeDetails = () => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [singleRecipe, setSingalRecipe] = useState({});
 
   const getRecipeDetails = () => {
     axios.get(`http://localhost:8080/recipes/${id}`).then((res) => {
-      console.log(res.data.recipe);
+      // console.log(res.data.recipe);
+      setSingalRecipe(res.data.recipe);
       setIsLoading(false);
     });
   };
@@ -28,6 +30,8 @@ const RecipeDetails = () => {
   useEffect(() => {
     getRecipeDetails();
   }, []);
+
+  // console.log("singleRecipe:", singleRecipe.analyzedInstructions[0].steps);
 
   return (
     <>
@@ -44,11 +48,11 @@ const RecipeDetails = () => {
               my="2rem"
               key={el}
             >
-              {/* skeletoon */}
+              {/* skeleton */}
               <Box
                 width={{ base: "95%", lg: "50%" }}
                 height={{ base: "40vh", lg: "60vh" }}
-                border={"1px solid red"}
+               
               >
                 <Skeleton height={"100%"} width="100%" borderRadius={"xl"} />
               </Box>
@@ -95,7 +99,7 @@ const RecipeDetails = () => {
               height={"100%"}
               width="100%"
               borderRadius={"xl"}
-              src="https://spoonacular.com/recipeImages/640077-556x370.jpg"
+              src={singleRecipe.image}
             />
           </Box>
           <Flex
@@ -106,48 +110,33 @@ const RecipeDetails = () => {
             py="1rem"
           >
             <Heading as="h4" size="md">
-              Corn Chowder with Potatoes, Poblanos, and Smoked Gouda
+              {singleRecipe.title}
             </Heading>
 
             <Text height="18px" width="250px">
-              Cooking time : 45 minutes
+              Cooking time : {singleRecipe.readyInMinutes} minutes
             </Text>
 
             <Button height="40px" width="160px" borderRadius={"xl"}>
               Instructions
             </Button>
-            <Text>
-              Corn Chowder with Potatoes, Poblanos, and Smoked Gouda might be a
-              good recipe to expand your hor d'oeuvre recipe box. For $1.28 per
-              serving, this recipe covers 13% of your daily requirements of
-              vitamins and minerals. One serving contains 316 calories, 9g of
-              protein, and 14g of fat. This recipe serves 6. A few people made
-              this recipe, and 22 would say it hit the spot. From preparation to
-              the plate, this recipe takes around 45 minutes. A mixture of
-              potatoes, half-and-half, poblano chiles, and a handful of other
-              ingredients are all it takes to make this recipe so tasty. It is
-              brought to you by Foodista. It is a good option if you're
-              following a gluten free and lacto ovo vegetarian diet. Taking all
-              factors into account, this recipe earns a spoonacular score of
-              51%, which is solid. Similar recipes are Smoked Chicken Enchiladas
-              with corn & roasted poblanos, Smoked Chicken Enchiladas with corn
-              & roasted poblanos, and Smoked Gouda Mashed Potatoes.
-            </Text>
+            <Text>{singleRecipe.instructions}</Text>
             <OrderedList>
-              <ListItem>Lorem ipsum dolor sit amet</ListItem>
-              <ListItem>Consectetur adipiscing elit</ListItem>
-              <ListItem>Integer molestie lorem at massa</ListItem>
-              <ListItem>Facilisis in pretium nisl aliquet</ListItem>
+              {singleRecipe.analyzedInstructions[0].steps?.map((el, i) => (
+                <ListItem key={el.number}>{el.step}</ListItem>
+              ))}
             </OrderedList>
 
             <Button height="40px" width="160px" borderRadius={"xl"}>
               Ingredients
             </Button>
             <OrderedList>
-              <ListItem>Lorem ipsum dolor sit amet</ListItem>
-              <ListItem>Consectetur adipiscing elit</ListItem>
-              <ListItem>Integer molestie lorem at massa</ListItem>
-              <ListItem>Facilisis in pretium nisl aliquet</ListItem>
+              {singleRecipe.extendedIngredients?.map((el, i) => (
+                <ListItem key={el.id}>
+                  {el.name} {"-"}
+                  {el.amount}grams
+                </ListItem>
+              ))}
             </OrderedList>
           </Flex>
         </Flex>

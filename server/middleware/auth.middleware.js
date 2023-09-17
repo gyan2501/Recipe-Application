@@ -8,13 +8,17 @@ const auth = (req, res, next) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY); // JWT secret key from environment variables
       if (decoded) {
-        (req.body.authorId = decoded.authorId),
-          (req.body.author = decoded.author),
-          next();
+      
+        req.user = {
+          _id: decoded.authorId, //  user's ID
+          name: decoded.author,   //  user's name
+        };
+        next();
       } else {
         res.status(401).send({ error: "Unauthorized Please Login" });
       }
     } catch (error) {
+      console.error("Error verifying token:", error);
       res.status(401).send({ error: "Unauthorized" });
     }
   } else {

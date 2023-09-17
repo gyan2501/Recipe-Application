@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Flex,  } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import Signup from "../components/Signup";
 import Login from "../components/Login";
 import Navbar from "../components/Navbar";
@@ -18,7 +18,7 @@ const Authentication = () => {
         maxWidth="400px"
         margin="100px auto"
         boxShadow="dark-lg"
-        p="6"
+        p="5"
         rounded="md"
       >
         <Flex
@@ -37,7 +37,7 @@ const Authentication = () => {
             onClick={() => setIsSignup(true)} // Set isSignup to true when clicking "Sign up"
             _hover={{ cursor: "pointer" }}
           >
-            Sign up
+            Sign Up
           </Box>
           <Box
             border={"0.5px solid grey"}

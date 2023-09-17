@@ -16,23 +16,40 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { MoonIcon, Search2Icon, SunIcon } from "@chakra-ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function Navbar() {
+export default function Navbar({ onSearch }) {
   const { colorMode, toggleColorMode } = useColorMode();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token"); // tokens from loacal storage
-  useEffect(() => {
-   
+  const user = localStorage.getItem("user");
 
+  useEffect(() => {
     if (token) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
   }, []);
+
+  // search function
+  const handleSearch = () => {
+    if (searchQuery.trim() !== "") {
+      // Invoke the provided onSearch callback with the search query
+      onSearch(searchQuery);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+  };
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -58,8 +75,10 @@ export default function Navbar() {
               border={"1px solid grey"}
               bgColor={"whiteAlpha.400"}
               mr={"5px"}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <Button colorScheme="teal" variant="solid">
+            <Button colorScheme="teal" variant="solid" onClick={handleSearch}>
               <Search2Icon />
             </Button>
           </Box>
@@ -99,20 +118,20 @@ export default function Navbar() {
                     </Center>
                     <br />
                     <Center>
-                      <p>Username :{token}</p>
+                      <p>User's Name: {user}</p>
                     </Center>
                     <br />
                     <MenuDivider />
                     <Link to={"/profile"}>
                       <MenuItem>Your Account</MenuItem>
                     </Link>
-                    <MenuItem>Logout</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </MenuList>
                 </Menu>
               ) : (
                 <Link to={"/authentication"}>
                   <Button variant={"outline"} colorScheme="teal">
-                    Sign up / Login
+                    Sign up
                   </Button>
                 </Link>
               )}

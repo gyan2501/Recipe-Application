@@ -60,7 +60,9 @@ userRouter.post("/login", async (req, res) => {
         { authorId: user._id, author: user.name },
         process.env.JWT_SECRET_KEY
       );
-      res.status(200).send({ message: "Login successful", token });
+      res
+        .status(200)
+        .send({ message: "Login successful", token, user: user.name });
     } else {
       res.status(401).send({ message: "Wrong Credentials!" });
     }
