@@ -1,14 +1,125 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { Box } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  HStack,
+  Heading,
+  Skeleton,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import FavouriteRecipeCard from "../components/FavouriteRecipeCard";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
+  const [favouriteRecipe, setFavouriteRecipe] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    const getFavouriteRecipies = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/favourite", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("checking",response.data);
+        setFavouriteRecipe(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getFavouriteRecipies();
+  }, []);
+
   return (
     <>
       <Navbar />
-      Profile
-      <Box border={"1px solid red"}>
 
+      <Box>
+        <Box>
+          <Heading as="h3" size="lg" p={7}>
+            Profile: {localStorage.getItem("user")}
+          </Heading>
+        </Box>
+        <Box>
+          <Text
+            fontSize="lg"
+            ml={7}
+            fontWeight={"semibold"}
+            textDecoration={"underline"}
+          >
+            Favorite Recipes
+          </Text>
+
+          {isLoading ? (
+            <Grid
+              templateColumns={{
+                sm: "repeat(1,1fr)",
+                md: "repeat(2,1fr)",
+                lg: "repeat(3,1fr)",
+                xl: "repeat(4,1fr)",
+              }}
+              gap={3}
+              p={8}
+            >
+              {[...Array(favouriteRecipe.length).keys()].map((el) => (
+                <Stack key={el} width={"100%"}>
+                  <Skeleton
+                    height={{ base: "250px", md: "250px" }}
+                    width={{ base: "300px", md: "350px" }}
+                    borderRadius={"md"}
+                  />
+                  <HStack width={"100%"}>
+                    <Skeleton
+                      height="16px"
+                      h={"40px"}
+                      w={"80"}
+                      borderRadius={"md"}
+                    />
+                    <Skeleton
+                      height="16px"
+                      w={"20%"}
+                      h={"40px"}
+                      borderRadius={"md"}
+                    />
+                  </HStack>
+                </Stack>
+              ))}
+            </Grid>
+          ) : favouriteRecipe.length === 0 ? (
+            <Text textAlign={"center"} fontSize="xl" fontWeight={"bold"}>
+              There are no favorite recipes available.{" "}
+              <Link
+                to={"/"}
+                style={{ textDecoration: "underline", color: "teal" }}
+              >
+                Add Some Recipe{" "}
+              </Link>
+            </Text>
+          ) : (
+            <Grid
+              templateColumns={{
+                sm: "repeat(1,1fr)",
+                md: "repeat(2,1fr)",
+                lg: "repeat(3,1fr)",
+                xl: "repeat(4,1fr)",
+              }}
+              gap={3}
+              p={8}
+            >
+              {favouriteRecipe.map((el) => (
+                <FavouriteRecipeCard key={el.id} el={el} />
+              ))}
+            </Grid>
+          )}
+        </Box>
       </Box>
     </>
   );

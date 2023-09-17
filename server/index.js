@@ -12,7 +12,7 @@ app.use(cors());
 
 app.use("/users", userRouter);
 app.use("/recipes", recipeRouter);
-app.use("/favorite", favouriteRecipeRouter)
+app.use("/favourite", favouriteRecipeRouter);
 
 app.listen(process.env.PORT, async () => {
   try {

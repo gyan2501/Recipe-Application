@@ -5,15 +5,11 @@ const axios = require("axios");
 
 const favouriteRecipeRouter = express.Router();
 
-// Create a route to save a favorite recipe
+// Create a route to save a favourite recipe
 favouriteRecipeRouter.post("/", auth, async (req, res) => {
   try {
     const { user } = req;
     const { id } = req.body; // client sends the 'id' of the recipe
-
-    if (!id) {
-      return res.status(400).send({ error: "Recipe 'id' is required" });
-    }
 
     // Fetch recipe data from Spoonacular using the 'id'
     const response = await axios.get(
@@ -28,47 +24,57 @@ favouriteRecipeRouter.post("/", auth, async (req, res) => {
         .send({ error: "Invalid recipe data from Spoonacular" });
     }
 
-    // Check if the recipe is already saved as a favorite by the user
-    const existingFavorite = await favouriteRecipeModel.findOne({
+    // Check if the recipe is already saved as a favourite by the user
+    const existingfavourite = await favouriteRecipeModel.findOne({
       user: user._id,
       "recipe.id": recipe.id,
     });
 
-    if (existingFavorite) {
+    if (existingfavourite) {
       return res
         .status(409)
-        .send({ error: "Recipe is already saved as a favorite" });
+        .send({ error: "Recipe is already saved as a favourite" });
     }
 
-    // Create a new favorite recipe document
-    const newFavorite = new favouriteRecipeModel({
+    // Create a new favourite recipe document
+    const newfavourite = new favouriteRecipeModel({
       user: user._id,
       recipe,
     });
 
-    await newFavorite.save();
+    await newfavourite.save();
 
-    res.status(201).send({ message: "Favorite recipe saved successfully" });
+    res.status(201).send({ message: "favourite recipe saved successfully" });
   } catch (error) {
-    console.error("Error saving favorite recipe:", error);
+    console.error("Error saving favourite recipe:", error);
     res
       .status(500, 409)
-      .send({ error: "Error occurred while saving the favorite recipe" });
+      .send({ error: "Error occurred while saving the favourite recipe" });
   }
 });
 
-// Get Favroites
+// Get Favroites only authorised user's data
 favouriteRecipeRouter.get("/", auth, async (req, res) => {
   try {
-    const favorites = await favouriteRecipeModel
-      .find()
-      .populate("user", "name");
+    const favourites = await favouriteRecipeModel.find({ user: req.user });
+    console.log(favourites);
 
-    res.status(200).send(favorites);
+    res.status(200).send(favourites);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).send({ message: error.message });
+    console.log(error);
   }
 });
+
+// Delete Favourite Recipe
+favouriteRecipeRouter.delete("/:id", auth, async (req, res) => {
+  try {
+    
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+});
+
 
 module.exports = {
   favouriteRecipeRouter,

@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const RecipeCard = ({ el }) => {
-  console.log("this el", el);
+  // console.log("this el", el);
   const toast = useToast();
   const token = localStorage.getItem("token");
 
   const handleFavouriteRecipe = () => {
     axios
-      .post("http://localhost:8080/favorite", JSON.stringify(el), {
+      .post("http://localhost:8080/favourite", JSON.stringify(el), {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -23,8 +23,8 @@ const RecipeCard = ({ el }) => {
           // Showing success toast
           toast({
             position: "top",
-            title: "Recipe added to favorites!",
-            description: "We've added your recipe to your favorites.",
+            title: "Recipe added to favourites!",
+            description: "We've added your recipe to your favourites.",
             status: "success",
             duration: 5000,
             isClosable: true,
@@ -45,8 +45,8 @@ const RecipeCard = ({ el }) => {
           // Showing error toast
           toast({
             position: "top",
-            title: "Already add to the favorites!",
-            description: "Recipe is already in the favorites!",
+            title: "Already add to the favourites!",
+            description: "Recipe is already in the favourites!",
             status: "info",
             duration: 5000,
             isClosable: true,
@@ -54,12 +54,12 @@ const RecipeCard = ({ el }) => {
         }
       })
       .catch((error) => {
-        console.error("Error adding recipe to favorites:", error);
+        console.error("Error adding recipe to favourites:", error);
         // Showing error toast
         toast({
           position: "top",
-          title: "Error in adding recipe to favorites!",
-          description: "Error in adding recipe to favorites! try again!",
+          title: "Error in adding recipe to favourites!",
+          description: "Error in adding recipe to favourites! try again!",
           status: "error",
           duration: 5000,
           isClosable: true,
