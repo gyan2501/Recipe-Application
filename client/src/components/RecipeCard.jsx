@@ -1,14 +1,14 @@
 import { Box, Button, Flex, Heading, Image, useToast } from "@chakra-ui/react";
 import React from "react";
 import { AiOutlineHeart } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const RecipeCard = ({ el }) => {
   // console.log("this el", el);
   const toast = useToast();
   const token = localStorage.getItem("token");
-
+const navigate = useNavigate()
   const handleFavouriteRecipe = () => {
     axios
       .post("https://recipe-application-1fov.onrender.com/favourite", JSON.stringify(el), {
@@ -58,12 +58,13 @@ const RecipeCard = ({ el }) => {
         // Showing error toast
         toast({
           position: "top",
-          title: "Error in adding recipe to favourites!",
-          description: "Error in adding recipe to favourites! try again!",
+          title: "Please Login First!",
+          description: "Unauthorized Please Login",
           status: "error",
           duration: 5000,
           isClosable: true,
         });
+        navigate("/authentication")
       });
   };
 

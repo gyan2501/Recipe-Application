@@ -23,11 +23,14 @@ const Profile = () => {
   useEffect(() => {
     const getFavouriteRecipies = async () => {
       try {
-        const response = await axios.get("https://recipe-application-1fov.onrender.com/favourite", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://recipe-application-1fov.onrender.com/favourite",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         // console.log("checking",response.data);
         setFavouriteRecipe(response.data);
         setIsLoading(false);
@@ -42,11 +45,14 @@ const Profile = () => {
   const handleDeleteFavourite = async (id) => {
     try {
       // Send a DELETE request to your backend API to delete the favorite recipe
-      await axios.delete(`https://recipe-application-1fov.onrender.com/favorite/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `https://recipe-application-1fov.onrender.com/favorite/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       // Show a success toast
       toast({
         position: "top",
@@ -91,18 +97,18 @@ const Profile = () => {
             Favorite Recipes
           </Text>
 
-          {isLoading ? (
-            <Grid
-              templateColumns={{
-                sm: "repeat(1,1fr)",
-                md: "repeat(2,1fr)",
-                lg: "repeat(3,1fr)",
-                xl: "repeat(4,1fr)",
-              }}
-              gap={3}
-              p={8}
-            >
-              {[...Array(favouriteRecipe.length).keys()].map((el,i) => (
+          <Grid
+            templateColumns={{
+              sm: "repeat(1, 1fr)",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
+              xl: "repeat(4, 1fr)",
+            }}
+            gap={3}
+            p={8}
+          >
+            {isLoading && favouriteRecipe.length === 0 ? (
+              [...Array(favouriteRecipe.length).keys()].map((i) => (
                 <Stack key={i} width={"100%"}>
                   <Skeleton
                     height={{ base: "250px", md: "250px" }}
@@ -113,7 +119,7 @@ const Profile = () => {
                     <Skeleton
                       height="16px"
                       h={"40px"}
-                      w={"80"}
+                      w={"80px"}
                       borderRadius={"md"}
                     />
                     <Skeleton
@@ -124,39 +130,27 @@ const Profile = () => {
                     />
                   </HStack>
                 </Stack>
-              ))}
-            </Grid>
-          ) : favouriteRecipe.length === 0 ? (
-            <Text textAlign={"center"} fontSize="xl" fontWeight={"bold"} >
-              There are no favorite recipes available.{" "}
-              <Link
-                to={"/"}
-                style={{ textDecoration: "underline", color: "teal" }}
-              >
-                Add Some Recipe{" "}
-              </Link>
-            </Text>
-          ) : (
-            <Grid
-              templateColumns={{
-                sm: "repeat(1,1fr)",
-                md: "repeat(2,1fr)",
-                lg: "repeat(3,1fr)",
-                xl: "repeat(4,1fr)",
-              }}
-              gap={3}
-              p={8}
-            >
-              {favouriteRecipe.map((el,i) => (
-                
+              ))
+            ) : favouriteRecipe.length === 0 ? (
+              <Text textAlign={"center"} fontSize="xl" fontWeight={"bold"}>
+                There are no favorite recipes available.{" "}
+                <Link
+                  to={"/"}
+                  style={{ textDecoration: "underline", color: "teal" }}
+                >
+                  Add Some Recipe{" "}
+                </Link>
+              </Text>
+            ) : (
+              favouriteRecipe.map((el, i) => (
                 <FavouriteRecipeCard
-                 key={i}
+                  key={el._id}
                   el={el}
                   onDelete={handleDeleteFavourite}
                 />
-              ))}
-            </Grid>
-          )}
+              ))
+            )}
+          </Grid>
         </Box>
       </Box>
     </>
