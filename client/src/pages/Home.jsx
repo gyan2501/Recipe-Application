@@ -9,7 +9,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const getRecipe = () => {
-    axios.get(`http://localhost:8080/recipes/`).then((res) => {
+    axios.get(`https://recipe-application-1fov.onrender.com/recipes/`).then((res) => {
       // console.log(res.data.recipes);
       setRecipes(res.data.recipes);
       setIsLoading(false);

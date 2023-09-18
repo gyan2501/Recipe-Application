@@ -34,7 +34,7 @@ const Signup = () => {
 
     try {
       setIsLoading(true);
-      let res = await fetch("http://localhost:8080/users/register", {
+      let res = await fetch("https://recipe-application-1fov.onrender.com/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

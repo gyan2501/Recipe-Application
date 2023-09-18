@@ -8,6 +8,7 @@ import {
   Skeleton,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import FavouriteRecipeCard from "../components/FavouriteRecipeCard";
 import axios from "axios";
@@ -16,10 +17,10 @@ import { Link } from "react-router-dom";
 const Profile = () => {
   const [favouriteRecipe, setFavouriteRecipe] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const toast = useToast();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
     const getFavouriteRecipies = async () => {
       try {
         const response = await axios.get("http://localhost:8080/favourite", {
@@ -27,7 +28,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("checking",response.data);
+        // console.log("checking",response.data);
         setFavouriteRecipe(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -37,6 +38,38 @@ const Profile = () => {
 
     getFavouriteRecipies();
   }, []);
+
+  const handleDeleteFavourite = async (id) => {
+    try {
+      // Send a DELETE request to your backend API to delete the favorite recipe
+      await axios.delete(`https://recipe-application-1fov.onrender.com/favorite/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // Show a success toast
+      toast({
+        position: "top",
+        title: "Favorite recipe deleted",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+    } catch (error) {
+      // Handle any errors here
+      console.error("deleting favorite recipe Error:", error);
+      // Show an error toast
+      toast({
+        position: "top",
+        title: "Error deleting favorite recipe",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+  };
+
+  console.log("fav", favouriteRecipe);
 
   return (
     <>
@@ -69,8 +102,8 @@ const Profile = () => {
               gap={3}
               p={8}
             >
-              {[...Array(favouriteRecipe.length).keys()].map((el) => (
-                <Stack key={el} width={"100%"}>
+              {[...Array(favouriteRecipe.length).keys()].map((el,i) => (
+                <Stack key={i} width={"100%"}>
                   <Skeleton
                     height={{ base: "250px", md: "250px" }}
                     width={{ base: "300px", md: "350px" }}
@@ -115,7 +148,12 @@ const Profile = () => {
               p={8}
             >
               {favouriteRecipe.map((el) => (
-                <FavouriteRecipeCard key={el.id} el={el} />
+                
+                <FavouriteRecipeCard
+                 
+                  el={el}
+                  onDelete={handleDeleteFavourite}
+                />
               ))}
             </Grid>
           )}

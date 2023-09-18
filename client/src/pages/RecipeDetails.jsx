@@ -13,6 +13,7 @@ import {
   Skeleton,
   Text,
 } from "@chakra-ui/react";
+import "../App.css";
 
 const RecipeDetails = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ const RecipeDetails = () => {
   const [singleRecipe, setSingalRecipe] = useState({});
 
   const getRecipeDetails = () => {
-    axios.get(`http://localhost:8080/recipes/${id}`).then((res) => {
+    axios.get(`https://recipe-application-1fov.onrender.com/recipes/${id}`).then((res) => {
       // console.log(res.data.recipe);
       setSingalRecipe(res.data.recipe);
       setIsLoading(false);
@@ -31,7 +32,7 @@ const RecipeDetails = () => {
     getRecipeDetails();
   }, []);
 
-  // console.log("singleRecipe:", singleRecipe.analyzedInstructions[0].steps);
+  console.log("singleRecipe:", singleRecipe);
 
   return (
     <>
@@ -52,7 +53,6 @@ const RecipeDetails = () => {
               <Box
                 width={{ base: "95%", lg: "50%" }}
                 height={{ base: "40vh", lg: "60vh" }}
-               
               >
                 <Skeleton height={"100%"} width="100%" borderRadius={"xl"} />
               </Box>
@@ -90,6 +90,7 @@ const RecipeDetails = () => {
           marginX="auto"
           my="2rem"
           textAlign={"justify"}
+          h={"80vh"}
         >
           <Box
             width={{ base: "95%", lg: "50%" }}
@@ -104,10 +105,14 @@ const RecipeDetails = () => {
           </Box>
           <Flex
             width={{ base: "95%", lg: "50%", sm: "100%" }}
-            px={"3rem"}
+            px={"2rem"}
             flexDir="column"
             gap="2rem"
             py="1rem"
+            overflow={"auto"}
+            className="custom-scrollbar"
+            mt={4}
+            
           >
             <Heading as="h4" size="md">
               {singleRecipe.title}
@@ -116,8 +121,9 @@ const RecipeDetails = () => {
             <Text height="18px" width="250px">
               Cooking time : {singleRecipe.readyInMinutes} minutes
             </Text>
+            {/* <Text>{singleRecipe.summary}</Text> */}
 
-            <Button height="40px" width="160px" borderRadius={"xl"}>
+            <Button height="40px" width="160px" borderRadius={"xl"} p={2}>
               Instructions
             </Button>
             <Text>{singleRecipe.instructions}</Text>
@@ -127,7 +133,7 @@ const RecipeDetails = () => {
               ))}
             </OrderedList>
 
-            <Button height="40px" width="160px" borderRadius={"xl"}>
+            <Button height="40px" width="160px" borderRadius={"xl"} p={2}>
               Ingredients
             </Button>
             <OrderedList>
