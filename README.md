@@ -34,7 +34,7 @@ The Recipe Application is a web-based platform that allows users to explore and 
 
 1. Clone the repository:
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/gyan2501/Webledger-FSA
    ```
 2. Install frontend dependencies:
    ```sh
