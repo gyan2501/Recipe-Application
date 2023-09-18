@@ -23,7 +23,7 @@ const Home = () => {
 
   const getsearchRecipes = (searchQuery) => {
     axios
-      .get(`http://localhost:8080/recipes/search`, {
+      .get(`https://recipe-application-1fov.onrender.com/recipes/search`, {
         params: { query: searchQuery },
       })
       .then((res) => {

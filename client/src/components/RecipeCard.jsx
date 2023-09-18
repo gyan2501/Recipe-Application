@@ -11,7 +11,7 @@ const RecipeCard = ({ el }) => {
 
   const handleFavouriteRecipe = () => {
     axios
-      .post("http://localhost:8080/favourite", JSON.stringify(el), {
+      .post("https://recipe-application-1fov.onrender.com/favourite", JSON.stringify(el), {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
