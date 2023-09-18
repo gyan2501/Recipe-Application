@@ -26,6 +26,7 @@ const FavouriteRecipeCard = ({ el, onDelete, }) => {
             {el.recipe.title}
           </Heading>
         </Box>
+        
         <Box>
           <Button variant="outline" colorScheme="red">
             <AiFillDelete size={25} onClick={handleDelete} color="red" />
