@@ -23,7 +23,7 @@ const Profile = () => {
   useEffect(() => {
     const getFavouriteRecipies = async () => {
       try {
-        const response = await axios.get("https://recipe-application-1fov.onrender.com/favorite", {
+        const response = await axios.get("https://recipe-application-1fov.onrender.com/favourite", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -127,7 +127,7 @@ const Profile = () => {
               ))}
             </Grid>
           ) : favouriteRecipe.length === 0 ? (
-            <Text textAlign={"center"} fontSize="xl" fontWeight={"bold"}>
+            <Text textAlign={"center"} fontSize="xl" fontWeight={"bold"} >
               There are no favorite recipes available.{" "}
               <Link
                 to={"/"}
@@ -147,10 +147,10 @@ const Profile = () => {
               gap={3}
               p={8}
             >
-              {favouriteRecipe.map((el) => (
+              {favouriteRecipe.map((el,i) => (
                 
                 <FavouriteRecipeCard
-                 
+                 key={i}
                   el={el}
                   onDelete={handleDeleteFavourite}
                 />
