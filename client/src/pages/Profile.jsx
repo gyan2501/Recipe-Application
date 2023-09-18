@@ -23,7 +23,7 @@ const Profile = () => {
   useEffect(() => {
     const getFavouriteRecipies = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/favourite", {
+        const response = await axios.get("https://recipe-application-1fov.onrender.com/favorite", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
